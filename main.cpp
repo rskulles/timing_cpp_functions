@@ -1,4 +1,3 @@
-#include <bits/chrono.h>
 #include <chrono>
 #include <functional>
 #include <iostream>
@@ -33,13 +32,13 @@ void time_size(size_t x, size_t y, size_t numb_of_times) {
     (*matrix).push_back(new std::vector<uint8_t>(y, 1));
   }
 
-  auto ms_avg = std::chrono::nanoseconds::zero();
-  auto ms_min = std::chrono::nanoseconds::zero();
-  auto ms_max = std::chrono::nanoseconds::zero();
+  auto ms_avg = std::chrono::milliseconds::zero();
+  auto ms_min = std::chrono::milliseconds::zero();
+  auto ms_max = std::chrono::milliseconds::zero();
   std::cout << "Running...." << std::endl;
   for (auto i = 0; i < numb_of_times; ++i) {
     auto d = time_func<uint, std::vector<std::vector<uint8_t> *> *,
-                       std::chrono::nanoseconds>(sum_matrix, matrix);
+                       std::chrono::milliseconds>(sum_matrix, matrix);
     if (i == 0) {
       ms_avg = d;
       ms_min = d;
@@ -61,10 +60,10 @@ void time_size(size_t x, size_t y, size_t numb_of_times) {
   }
   delete matrix;
   std::cout << "**********" << std::endl;
-  std::cout << "Total time: " << ms_avg.count() << "ns" << std::endl
-            << "\tfastest: " << ms_min.count() << "ns" << std::endl
-            << "\tslowest: " << ms_max.count() << "ns" << std::endl
-            << "\tavg: " << ms_avg.count() / numb_of_times << "ns" << std::endl;
+  std::cout << "Total time: " << ms_avg.count() << "ms" << std::endl
+            << "\tfastest: " << ms_min.count() << "ms" << std::endl
+            << "\tslowest: " << ms_max.count() << "ms" << std::endl
+            << "\tavg: " << ms_avg.count() / numb_of_times << "ms" << std::endl;
   std::cout << "**********" << std::endl << std::endl;
 }
 
@@ -74,8 +73,6 @@ int main() {
   time_size(100, 1000, 1000);
   time_size(100, 10000, 1000);
   time_size(100, 100000, 1000);
-  time_size(100, 1000000, 1000); // Times should be the same starting here
-  time_size(1000, 100000, 1000);
-  time_size(10000, 10000, 1000);
+  time_size(100, 1000000, 100); 
   return 0;
 }
