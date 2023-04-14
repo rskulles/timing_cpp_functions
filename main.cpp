@@ -12,11 +12,11 @@ D time_func(std::function<T(P &)> func, P &param) {
   return std::chrono::duration_cast<D>(tp2 - tp1);
 }
 
-uint sum_matrix(std::vector<std::vector<uint8_t> *> *matrix) {
+uint sum_matrix(std::vector<std::vector<uint8_t> > matrix) {
   uint sum = 0;
-  for (size_t i = 0; i < matrix->size(); ++i) {
-    for (size_t j = 0; j < (*matrix)[0]->size(); ++j) {
-      sum += (*matrix)[i]->at(j);
+  for (size_t i = 0; i < matrix.size(); ++i) {
+    for (size_t j = 0; j < matrix[0].size(); ++j) {
+      sum += matrix[i][j];
     }
   }
   return sum;
@@ -25,11 +25,11 @@ uint sum_matrix(std::vector<std::vector<uint8_t> *> *matrix) {
 void time_size(size_t x, size_t y, size_t numb_of_times) {
   std::cout << "Creating a " << x << "x" << y << " matrix and running code "
             << numb_of_times << " times" << std::endl;
-  std::vector<std::vector<uint8_t> *> *matrix =
-      new std::vector<std::vector<uint8_t> *>();
+  std::vector<std::vector<uint8_t> > matrix; 
+
 
   for (auto i = 0; i < x; ++i) {
-    (*matrix).push_back(new std::vector<uint8_t>(y, 1));
+    matrix.push_back( std::vector<uint8_t>(y, 1));
   }
 
   auto ms_avg = std::chrono::milliseconds::zero();
@@ -37,7 +37,7 @@ void time_size(size_t x, size_t y, size_t numb_of_times) {
   auto ms_max = std::chrono::milliseconds::zero();
   std::cout << "Running...." << std::endl;
   for (auto i = 0; i < numb_of_times; ++i) {
-    auto d = time_func<uint, std::vector<std::vector<uint8_t> *> *,
+    auto d = time_func<uint, std::vector<std::vector<uint8_t> > ,
                        std::chrono::milliseconds>(sum_matrix, matrix);
     if (i == 0) {
       ms_avg = d;
@@ -55,10 +55,6 @@ void time_size(size_t x, size_t y, size_t numb_of_times) {
       }
     }
   }
-  for (auto i = 0; i < x; ++i) {
-    delete (*matrix)[i];
-  }
-  delete matrix;
   std::cout << "**********" << std::endl;
   std::cout << "Total time: " << ms_avg.count() << "ms" << std::endl
             << "\tfastest: " << ms_min.count() << "ms" << std::endl
